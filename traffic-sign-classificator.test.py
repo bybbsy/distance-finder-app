@@ -12,12 +12,14 @@ font = cv2.FONT_HERSHEY_SIMPLEX
 ##############################################
 
 # SETUP THE VIDEO CAMERA
-cap = cv2.VideoCapture('video/stop-sign.mp4')
+# cap = cv2.VideoCapture('video/stop-sign.mp4')
+
+cap = cv2.VideoCapture(0)
 cap.set(3, frameWidth)
 cap.set(4, frameHeight)
 cap.set(10, brightness)
 # IMPORT THE TRANNIED MODEL
-pickle_in = open("model_trained.p", "rb")  # rb = READ BYTE
+pickle_in = open("model_trained_10.p", "rb")  # rb = READ BYTE
 model = pickle.load(pickle_in)
 
 
