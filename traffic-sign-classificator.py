@@ -14,13 +14,12 @@ import pandas as pd
 import random
 from keras.preprocessing.image import ImageDataGenerator
  
- 
 ################# Parameters #####################
  
 path = "image" # folder with all the class folders
-labelFile = 'labels.csv' # file with all names of classes
-batch_size_val= 50  # how many to process together
-steps_per_epoch_val= 2000
+labelFile = 'labels/labels.csv' # file with all names of classes
+batch_size_val= 32  # how many to process together
+# steps_per_epoch_val= 2000
 epochs_val= 10
 imageDimesions = (32,32,3)
 testRatio = 0.2    # if 1000 images split will 200 for testing
@@ -51,7 +50,9 @@ classNo = np.array(classNo)
 ############################### Split Data
 X_train, X_test, y_train, y_test = train_test_split(images, classNo, test_size=testRatio)
 X_train, X_validation, y_train, y_validation = train_test_split(X_train, y_train, test_size=validationRatio)
- 
+
+
+steps_per_epoch_val = len(X_train) // batch_size_val
 # X_train = ARRAY OF IMAGES TO TRAIN
 # y_train = CORRESPONDING CLASS ID
  
@@ -176,7 +177,7 @@ def myModel():
 ############################### TRAIN
 model = myModel()
 print(model.summary())
-history=model.fit_generator(dataGen.flow(X_train,y_train,batch_size=batch_size_val),steps_per_epoch=steps_per_epoch_val,epochs=epochs_val,validation_data=(X_validation,y_validation),shuffle=1)
+history=model.fit(dataGen.flow(X_train,y_train,batch_size=batch_size_val),steps_per_epoch=steps_per_epoch_val,epochs=epochs_val,validation_data=(X_validation,y_validation),shuffle=1)
  
 ############################### PLOT
 plt.figure(1)
@@ -202,3 +203,5 @@ pickle_out= open("model_trained.p","wb")  # wb = WRITE BYTE
 pickle.dump(model,pickle_out)
 pickle_out.close()
 cv2.waitKey(0)
+
+print('Done')
